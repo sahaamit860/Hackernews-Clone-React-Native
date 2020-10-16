@@ -20,7 +20,7 @@ export default class ListItem extends Component {
   }
   async fetchData() {
     let url =
-      "https://hacker-news.firebaseio.com/v0/item/" + this.props.id + ".json";
+      "http://hn.algolia.com/api/v1/search?tags=story,author_pg/" + this.props.id + ".json";
     const response = await fetch(url);
     const data = await response.json();
     this.setState({ news: data });
