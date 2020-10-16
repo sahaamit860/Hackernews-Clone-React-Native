@@ -11,3 +11,5 @@
 
 * Will add hide functionality to hide stories and comments
 * Will add upvote and downvote functionality
+* Will use redux-saga and update the project
+* Need to restructure the project with different navigation component for better user experience
