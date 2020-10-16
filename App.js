@@ -1,114 +1,58 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React from "react";
+import { YellowBox } from "react-native";
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import { Font } from "expo";
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import LandingPage from "./src/screens/LandingPage";
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
+import CommentsPage from "./src/screens/CommentsPage";
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+import { StackNavigator, DrawerNavigator } from "react-navigation";
+const DrawerNavigation = DrawerNavigator({
+  LandingPage: {
+    screen: LandingPage
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+  CommentsPage: {
+    screen: CommentsPage
+  }
 });
+const StackNavigation = StackNavigator(
+  {
+    DrawerNavigation: {
+      screen: DrawerNavigation
+    },
+    LandingPage: {
+      screen: LandingPage
+    },
+    CommentsPage: {
+      screen: CommentsPage
+    }
+  },
+  {
+    headerMode: "none"
+  }
+);
+export default class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      fontLoaded: false
+    };
+    YellowBox.ignoreWarnings([
+      "Warning: componentWillMount is deprecated",
+      "Warning: componentWillReceiveProps is deprecated",
+      "Warning: componentWillUpdate is deprecated"
+    ]);
+  }
+  async componentDidMount() {
+    await Font.loadAsync({
+      "Roboto-Regular": require("./src/assets/fonts/Roboto-Regular.ttf")
+    });
 
-export default App;
+    this.setState({ fontLoaded: true });
+    console.warn("Fallback font is being used. Please check App.js file.");
+  }
+  render() {
+    return this.state.fontLoaded ? <StackNavigation /> : <Expo.AppLoading />;
+  }
+}
