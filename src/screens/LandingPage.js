@@ -20,7 +20,7 @@ export default class LandingPage extends Component {
   }
   async fetchData() {
     const response = await fetch(
-      "http://hn.algolia.com/api/v1/items.json"
+      "http://hn.algolia.com/api/v1/items/1.json"
     );
     const data = await response.json();
     this.setState({ newsList: data });
